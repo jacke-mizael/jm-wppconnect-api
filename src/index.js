@@ -13,9 +13,6 @@ let client = null;
 let qrCodeData = null;
 let sessionStatus = 'disconnected'; // disconnected | connecting | connected
 
-/**
- * Inicializa a sessão WPPConnect
- */
 async function startSession() {
     sessionStatus = 'connecting';
     try {
@@ -56,10 +53,6 @@ async function startSession() {
         sessionStatus = 'disconnected';
     }
 }
-
-// ========================
-// ENDPOINTS
-// ========================
 
 /**
  * GET /status-session
@@ -126,7 +119,6 @@ app.post('/send-text', async (req, res) => {
     }
 
     try {
-        // Remove qualquer sufixo existente e usa apenas os dígitos
         const cleanPhone = phone.replace(/@.*$/, '').replace(/\D/g, '');
 
         // Verifica se o número está registrado no WhatsApp
@@ -138,7 +130,6 @@ app.post('/send-text', async (req, res) => {
             });
         }
 
-        // Usa o ID retornado pelo próprio WhatsApp para evitar erro de LID
         const whatsappId = numberStatus.id?._serialized || `${cleanPhone}@c.us`;
 
         const result = await client.sendText(whatsappId, message);
@@ -159,10 +150,6 @@ app.post('/send-text', async (req, res) => {
         });
     }
 });
-
-// ========================
-// INICIALIZAÇÃO
-// ========================
 
 app.listen(PORT, () => {
     console.log(`WhatsApp Gateway rodando na porta ${PORT}`);
